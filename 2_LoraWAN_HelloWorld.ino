@@ -3,13 +3,13 @@
 #include <SPI.h>
 
 // LoRaWAN NwkSKey, network session key
-static const PROGMEM u1_t NWKSKEY[16] = { NETWORK_SESSION_KEY_HERE };  
+static const PROGMEM u1_t NWKSKEY[16] = { 0xEF, 0xE3, 0x50, 0x3E, 0xD3, 0xDB, 0x36, 0x3C, 0x7F, 0x8C, 0xB0, 0x1E, 0x15, 0xFA, 0x19, 0x87 };  
 
 // LoRaWAN AppSKey, application session key
-static const u1_t PROGMEM APPSKEY[16] = { APPLICATION_KEY_HERE };
+static const u1_t PROGMEM APPSKEY[16] = { 0xB5, 0x2F, 0x1D, 0x28, 0xF3, 0x1B, 0xF9, 0xA4, 0xAC, 0x65, 0x7B, 0xB4, 0xB2, 0xB5, 0x85, 0x6E };
 
 // LoRaWAN end-device address (DevAddr)
-static const u4_t DEVADDR =  DEVICE_ADDRESS_HERE ; // <-- Change this address for every node! For example, our device address is 26022DEN. We will need to replace "DEVICE_ADDRESS_HERE" as 0x26022DEB.
+static const u4_t DEVADDR =  0x26021A9E ; // <-- Change this address for every node! For example, our device address is 26022DEN. We will need to replace "DEVICE_ADDRESS_HERE" as 0x26022DEB.
 
 // These callbacks are only used in over-the-air activation, so they are
 // left empty here (we cannot leave them out completely unless
