@@ -31,8 +31,6 @@
 
 #include <Wire.h>            // Used to establish serial communication on the I2C bus
 #include <SparkFun_TMP117.h> // Used to send and recieve specific information from our sensor
-#include <lmic.h>
-#include <hal/hal.h>
 #include <SPI.h>
 
 // The default address of the device is 0x48 = (GND)
