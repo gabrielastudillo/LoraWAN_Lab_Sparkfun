@@ -39,6 +39,7 @@
 
 // The default address of the device is 0x48 = (GND)
 TMP117 sensor; // Initalize sensor
+static uint8_t payload[5];
 
 void setup()
 {
@@ -69,8 +70,19 @@ void loop()
     SerialUSB.println(); // Create a white space for easier viewing
     SerialUSB.print("Temperature in Celsius: ");
     SerialUSB.println(tempC);
-    SerialUSB.print("Temperature in Fahrenheit: ");
-    SerialUSB.println(tempF);
+    // adjust for the f2sflt16 range (-1 to 1)
+    temperature = tempC / 100;
+    // float -> int
+    // note: this uses the sflt16 datum (https://github.com/mcci-catena/arduino-lmic#sflt16)
+    uint16_t payloadTemp = LMIC_f2sflt16(temperature);
+    // int -> bytes
+    byte tempLow = lowByte(payloadTemp);
+    byte tempHigh = highByte(payloadTemp);
+    // place the bytes into the payload
+    payload[0] = tempLow;
+    payload[1] = tempHigh;
+    SerialUSB.println(payload[0]);
+    SerialUSB.println(payload[1]);
     delay(500); // Delay added for easier readings
   }
 }
