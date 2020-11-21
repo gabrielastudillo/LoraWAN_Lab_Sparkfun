@@ -4,22 +4,17 @@
   Madison Chodikov @ SparkFun Electronics
   May 29 2019
   ~
-
   This sketch configures the TMP117 temperature sensor and prints the
   temperature in degrees celsius and fahrenheit with a 500ms delay for
   easier readings. 
-
   Resources:
   Wire.h (included with Arduino IDE)
   SparkFunTMP117.h (included in the src folder) http://librarymanager/All#SparkFun_TMP117
-
   Development environment specifics:
   Arduino 1.8.9+
   Hardware Version 1.0.0
-
   This code is beerware; if you see me (or any other SparkFun employee) at
   the local, and you've found our code helpful, please buy us a round!
-
   Distributed as-is; no warranty is given.
 ******************************************************************************/
 
@@ -36,6 +31,9 @@
 
 #include <Wire.h>            // Used to establish serial communication on the I2C bus
 #include <SparkFun_TMP117.h> // Used to send and recieve specific information from our sensor
+#include <lmic.h>
+#include <hal/hal.h>
+#include <SPI.h>
 
 // The default address of the device is 0x48 = (GND)
 TMP117 sensor; // Initalize sensor
@@ -65,22 +63,22 @@ void loop()
   if (sensor.dataReady() == true) // Function to make sure that there is data ready to be printed, only prints temperature values when data is ready
   {
     float tempC = sensor.readTempC();
-    float tempF = sensor.readTempF();
-    // Print temperature in °C and °F
+    // Print temperature in °C
     SerialUSB.println(); // Create a white space for easier viewing
     SerialUSB.print("Temperature in Celsius: ");
     SerialUSB.println(tempC);
     // adjust for the f2sflt16 range (-1 to 1)
-    temperature = tempC / 100;
+    // tempC = tempC / 100;
     // float -> int
     // note: this uses the sflt16 datum (https://github.com/mcci-catena/arduino-lmic#sflt16)
-    uint16_t payloadTemp = LMIC_f2sflt16(temperature);
+    //uint16_t payloadTemp = LMIC_f2sflt16(tempC);
+    int16_t payloadTemp = round(tempC * 100);
     // int -> bytes
-    byte tempLow = lowByte(payloadTemp);
     byte tempHigh = highByte(payloadTemp);
+    byte tempLow = lowByte(payloadTemp);
     // place the bytes into the payload
-    payload[0] = tempLow;
-    payload[1] = tempHigh;
+    payload[0] = tempHigh;
+    payload[1] = tempLow;
     SerialUSB.println(payload[0]);
     SerialUSB.println(payload[1]);
     delay(500); // Delay added for easier readings
