@@ -1,0 +1,12 @@
+function Decoder(bytes, port) {
+  // Decode an uplink message from a buffer
+  // (array) of bytes to an object of fields.
+  var decoded = {};
+
+  var celciusInt = (bytes[0] << 24 >> 16) | bytes[1];
+
+  // Decode integer to float
+  decoded.celcius = celciusInt / 100;
+
+  return decoded;
+}
