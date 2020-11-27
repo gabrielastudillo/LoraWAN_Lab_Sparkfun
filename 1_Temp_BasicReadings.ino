@@ -70,15 +70,15 @@ void loop()
     // float -> int
     // note: this uses the sflt16 datum (https://github.com/mcci-catena/arduino-lmic#sflt16)
     //uint16_t payloadTemp = LMIC_f2sflt16(tempC);
-    int16_t payloadTemp = round(tempC * 100);
+    //int16_t payloadTemp = round(tempC * 100);
     // int -> bytes
-    byte tempHigh = highByte(payloadTemp);
-    byte tempLow = lowByte(payloadTemp);
+    //byte tempHigh = highByte(payloadTemp);
+    //byte tempLow = lowByte(payloadTemp);
     // place the bytes into the payload
-    payload[0] = tempHigh;
-    payload[1] = tempLow;
-    SerialUSB.println(payload[0]);
-    SerialUSB.println(payload[1]);
+    //payload[0] = tempHigh;
+    //payload[1] = tempLow;
+    //SerialUSB.println(payload[0]);
+    //SerialUSB.println(payload[1]);
     delay(500); // Delay added for easier readings
   }
 }
