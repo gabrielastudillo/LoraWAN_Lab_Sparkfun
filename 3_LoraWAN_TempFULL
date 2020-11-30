@@ -6,7 +6,7 @@
 
 // The default address of the device is 0x48 = (GND)
 TMP117 sensor; // Initalize sensor
-static uint8_t payload[5];
+static uint8_t payload[5];  //Initialize payload
 
 // LoRaWAN NwkSKey, network session key
 static const PROGMEM u1_t NWKSKEY[16] = { 0xEF, 0xE3, 0x50, 0x3E, 0xD3, 0xDB, 0x36, 0x3C, 0x7F, 0x8C, 0xB0, 0x1E, 0x15, 0xFA, 0x19, 0x87 };  
@@ -26,7 +26,6 @@ void os_getArtEui (u1_t* buf) { }
 void os_getDevEui (u1_t* buf) { }
 void os_getDevKey (u1_t* buf) { }
 
-//static uint8_t mydata[] = "Hello, world!";
 static osjob_t sendjob;
 
 // Schedule TX every this many seconds (might become longer due to duty
@@ -116,15 +115,6 @@ void do_send(osjob_t* j){
         // read the temperature from the DHT22
         //if (sensor.dataReady() == true) // Function to make sure that there is data ready to be printed, only prints temperature values when data is ready
         float tempC = sensor.readTempC();
-        // Print temperature in °C
-        //SerialUSB.println(); // Create a white space for easier viewing
-        //SerialUSB.print("Temperature in Celsius: ");
-        //SerialUSB.println(tempC);
-        // adjust for the f2sflt16 range (-1 to 1)
-        // tempC = tempC / 100;
-        // float -> int
-        // note: this uses the sflt16 datum (https://github.com/mcci-catena/arduino-lmic#sflt16)
-        //uint16_t payloadTemp = LMIC_f2sflt16(tempC);
         int16_t payloadTemp = round(tempC * 100);
         // int -> bytes
         byte tempHigh = highByte(payloadTemp);
@@ -132,9 +122,6 @@ void do_send(osjob_t* j){
         // place the bytes into the payload
         payload[0] = tempHigh;
         payload[1] = tempLow;
-        //SerialUSB.println(payload[0]);
-        //SerialUSB.println(payload[1]);
-        //delay(500); // Delay added for easier readings
         LMIC_setTxData2(1, payload, sizeof(payload)-1, 0);
         SerialUSB.println(F("Packet queued"));
     // Next TX is scheduled after TX_COMPLETE event.
